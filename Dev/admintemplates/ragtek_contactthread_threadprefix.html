@@ -1,0 +1,15 @@
+<xen:require css="public:thread_prefixes.css" />
+<xen:require css="public:title_prefix_edit.css" />
+<xen:require js="js/xenforo/title_prefix.js" />
+
+	<div id="PrefixContainer">
+			<xen:selectunit name="prefix_id" value="{$xenOptions.prefix_id}" label="{xen:phrase prefix}:"
+				inputclass="TitlePrefix"
+				data-container="#PrefixContainer"
+				data-textbox="#ctrl_title_template"
+				data-nodecontrol="#ctrl_optionsragtekContactThreadForumId"
+				data-prefixurl="{xen:adminlink forums/prefixes}">
+				<xen:option value="0" label="({xen:phrase no_prefix})" data-css="" />
+				<xen:options source="{$prefixes}" />
+			</xen:selectunit>
+		</div>
