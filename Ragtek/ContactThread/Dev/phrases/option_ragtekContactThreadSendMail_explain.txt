@@ -1,1 +1,1 @@
-Should the Contactmail also be sent?
+Should the Contact email also be sent?
