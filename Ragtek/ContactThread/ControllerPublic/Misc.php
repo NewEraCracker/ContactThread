@@ -17,7 +17,7 @@ class Ragtek_ContactThread_ControllerPublic_Misc extends
                 return $this->responseCaptchaFailed();
             }
 
-            $visitor = XenForo_Visitor::getInstance();
+            $visitor = XenForo_Visitor::getInstance()->toArray();
 
             if ($visitor['user_id']) {
                 $email = $visitor['email'];
@@ -42,10 +42,12 @@ class Ragtek_ContactThread_ControllerPublic_Misc extends
 
             $this->assertNotFlooding('contact');
 
-            $input['message'] = new XenForo_Phrase('ragtek_contactthread_message', array(
+            $ip = $this->_request->getClientIp(false);
+
+            $thread_message = new XenForo_Phrase('ragtek_contactthread_message', array(
                 'username' => $visitor['username'],
                 'email' => $email,
-                'ip' => $_SERVER['REMOTE_ADDR'],
+                'ip' => $ip,
                 'message' => $input['message']
             ));
 
@@ -56,7 +58,7 @@ class Ragtek_ContactThread_ControllerPublic_Misc extends
 
             $writer->set('title', $input['subject']);
             $postWriter = $writer->getFirstMessageDw();
-            $postWriter->set('message', $input['message']);
+            $postWriter->set('message', $thread_message);
             $nodeId = XenForo_Application::get('options')->ragtekContactThreadForumId;
 
             $writer->set('node_id', $nodeId);
@@ -73,7 +75,8 @@ class Ragtek_ContactThread_ControllerPublic_Misc extends
                 $mailParams = array(
                     'user' => $visitor,
                     'subject' => $input['subject'],
-                    'message' => $input['message']
+                    'message' => $input['message'],
+                    'ip' => $ip
                 );
 
                 $mail = XenForo_Mail::create('contact', $mailParams, 0);
